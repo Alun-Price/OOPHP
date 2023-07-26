@@ -14,7 +14,10 @@
   use App\Users\Customer;
   use App\Logging\Logger;
   use App\Conference\Attendee;
-  use APP\Conference\Host;
+  use App\Conference\Host;
+  use App\Utility\JsonFileReader;
+  use App\Exceptions\BadJsonException;
+  use App\Exceptions\FileNotFoundException;
   
   include 'autoload.php';
 
@@ -26,6 +29,29 @@
   $customer->setLogger($logger);
 
   $gary = new Host();
+
+  $jsonFileReader = new JsonFileReader();
+
+  $filename = './../../chapter3/inventory.json';
+
+  try {
+    
+    $inventory = $jsonFileReader->readFileAsAssociativeArray($filename);
+    print_r($inventory);
+
+  } catch(FileNotFoundException | BadJsonException $exception) {
+
+    print_r('The file '. $filename . ' could not be processed. Please check the filepath and content. ');
+  
+  } catch (Exception $exception) {
+
+    print_r($exception->getMessage() . ' in file ' . $exception->getFile() . ' on line ' . $exception->getLine());
+
+  } finally {
+    
+    print_r(PHP_EOL . 'Some final processing ...');
+  }
+
   
   ?>
   <p><?= $mySqlConnection->getDatabaseUrl() ?></p>
