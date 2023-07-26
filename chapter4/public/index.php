@@ -13,6 +13,8 @@
   use App\Calculators\Calculator;
   use App\Users\Customer;
   use App\Logging\Logger;
+  use App\Conference\Attendee;
+  use APP\Conference\Host;
   
   include 'autoload.php';
 
@@ -22,10 +24,13 @@
   $logger = new Logger();
   $customer = new Customer();
   $customer->setLogger($logger);
+
+  $gary = new Host();
   
   ?>
   <p><?= $mySqlConnection->getDatabaseUrl() ?></p>
   <p><?= $utility->status ?></p>
   <p><?= $customer->getLogger()->log()?></p>
+  <p><?= $gary->getMeta(); ?></p>
 </body>
 </html>
