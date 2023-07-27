@@ -6,24 +6,38 @@ class User
 {
   private int $id;
   private string $name;
+	private string $email;
+  private \DateTime $created_at;
 
-	public function getId() : int 
-  {
+	public function getId() : int {
 		return $this->id;
 	}
 
-	public function setId(int $value) 
-  {
+	public function setId(int $value) {
 		$this->id = $value;
 	}
 
-	public function getName() : string 
-  {
+	public function getName() : string {
 		return $this->name;
 	}
 
-	public function setName(string $value) 
-  {
+	public function setName(string $value) {
 		$this->name = $value;
+	}
+
+	public function getEmail() : string {
+		return $this->email;
+	}
+
+	public function setEmail(string $value) {
+		$this->email = $value;
+	}
+
+	public function getCreated_at() : \DateTime {
+		return $this->created_at;
+	}
+
+	public function setCreated_at(\DateTime $value) {
+		$this->created_at = $value;
 	}
 }
