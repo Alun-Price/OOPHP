@@ -37,4 +37,29 @@ class UserRepository
    
     return $stmt->rowCount() === 1;
   }
+
+  public function findById(int $id): ?User
+  {
+    $sql = "SELECT * FROM users WHERE id = :id";
+    $stmt = $this->getPdo()->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    $userArray = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+    if(!$userArray) {
+      return null;
+    }
+
+    // make a user object using the $userArray
+    return $this->makeUser($userArray);
+  }
+
+  private function makeUser(array $userData): User
+  {
+    $user = new User();
+    $user->setId($userData['id']);
+    $user->setName($userData['name']);
+    $user->setEmail($userData['email']);
+    $user->setCreated_at(date_create($userData['created_at'])); // create DateTime object
+    return $user;
+  }
 }

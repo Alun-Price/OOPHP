@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models; // not expected as doesn't follow folder structure
+namespace App\Models;
 
 class User
 {
@@ -13,31 +13,31 @@ class User
 		return $this->id;
 	}
 
-	public function setId(int $value) {
-		$this->id = $value;
+	public function setId(int $id): void {
+		$this->id = $id;
 	}
 
 	public function getName() : string {
 		return $this->name;
 	}
 
-	public function setName(string $value) {
-		$this->name = $value;
+	public function setName(string $name): void  {
+		$this->name = $name;
 	}
 
 	public function getEmail() : string {
 		return $this->email;
 	}
 
-	public function setEmail(string $value) {
-		$this->email = $value;
+	public function setEmail(string $email): void  {
+		$this->email = $email;
 	}
 
 	public function getCreated_at() : \DateTime {
 		return $this->created_at;
 	}
 
-	public function setCreated_at(\DateTime $value) {
-		$this->created_at = $value;
+	public function setCreated_at(\DateTime $created_at): void  {
+		$this->created_at = $created_at;
 	}
 }
