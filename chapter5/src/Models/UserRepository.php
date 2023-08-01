@@ -2,38 +2,14 @@
 
 namespace App\Models;
 
-class UserRepository
+class UserRepository extends ModelRepository
 {
-
-  private $pdo;
-
-  private function getPdo(): \PDO
-  {
-    if($this->pdo === null) { // check if other connection running
-        $options = [
-          \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-          \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-        ];
-
-        try {
-
-          $this->pdo = new \PDO("mysql:host=127.0.0.1;dbname=pdo-demo;charset=utf8mb4",'root', 'Username1', $options);
-
-        } catch (\PDOException $PDOException) {
-
-          throw new \PDOException($PDOException->getMessage(), (int) $PDOException->getCode());
-        }
-    }
-
-    return $this->pdo;
-  }
-
 
   public function save(array $userData): bool {
 
-    $sql = "INSERT INTO users (name, email) VALUES (:name, :email)";
+    $sql = "INSERT INTO users (name, email, user_timezone) VALUES (:name, :email, :user_timezone)";
     $stmt = $this->getPdo()->prepare($sql);
-    $stmt->execute(['name' => $userData['name'], 'email' => $userData['email']]);
+    $stmt->execute(['name' => $userData['name'], 'email' => $userData['email'], 'user_timezone' => $userData['user_timezone']]);
    
     return $stmt->rowCount() === 1;
   }
@@ -59,7 +35,9 @@ class UserRepository
     $user->setId($userData['id']);
     $user->setName($userData['name']);
     $user->setEmail($userData['email']);
+    $user->setUserTimezone($userData['user_timezone']);
     $user->setCreated_at(date_create($userData['created_at'])); // create DateTime object
+    $user->setUpdated_at(date_create($userData['updated_at']));
     return $user;
   }
 }
