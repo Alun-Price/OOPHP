@@ -24,7 +24,7 @@ if($id = $_GET['id'] ?? false) {
 <body>
   <div class="container" style="margin-top: 50px">
     <?php if($user): ?>
-        <h3><?= "Name: {$user->getName()}, Email: {$user->getEmail()}"; ?></h3>
+      <h3><?= "Name: {$user->getName()}, Email: {$user->getEmail()}"; ?></h3>
     <?php else: ?>
       <h3>Sorry. No user with that id could be found!!</h3>
 
