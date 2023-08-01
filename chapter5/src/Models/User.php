@@ -8,8 +8,16 @@ class User
   private string $name;
 	private string $email;
 	private string $user_timezone;
-  private \DateTime $created_at;
-  private \DateTime $updated_at;
+  private \DateTime|string $created_at;
+  private \DateTime|string $updated_at;
+
+	public function __get($property)
+	{
+		if (property_exists($this, $property)) {
+			return $this->$property;
+		}
+	}
+
 
 	public function getId() : int {
 		return $this->id;
@@ -44,18 +52,47 @@ class User
 	}
 
 	public function getCreated_at() : \DateTime {
-		return $this->created_at;
-	}
-
-	public function setCreated_at(\DateTime $created_at): void  {
-		$this->created_at = $created_at;
+		return new \DateTime($this->created_at);
 	}
 
 	public function getUpdated_at() : \DateTime {
-		return $this->updated_at;
+		return new \DateTime($this->updated_at);
 	}
 
 	public function setUpdated_at(\DateTime $updated_at): void  {
 		$this->updated_at = $updated_at;
+	}
+
+	public function getLocalTime() {
+		return date_create('now', new \DateTimeZone($this->user_timezone))->format('H:i');
+	} 
+
+	public function accountAge(): \DateInterval
+	{
+		return date_diff(date_create('now'), $this->getCreated_at());
+	} 
+
+
+	/**
+	 * Is the account active
+	 * 
+	 * Rules:
+	 * The account is active if
+	 * a) account < 90 days old OR
+	 * b) the account >= 90 days old AND it was updated in < 90 days
+	 * 
+	 * @return bool
+	 *  
+	 */
+
+	public function isActive(): bool
+	{
+		if ($this->accountAge()->days < 90) {
+			return true;
+		}
+
+		$lastUpdatedInterval = date_diff(date_create('now'), $this->getUpdated_at());
+
+		return $lastUpdatedInterval->days < 90;
 	}
 }

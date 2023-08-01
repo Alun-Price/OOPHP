@@ -4,7 +4,9 @@ namespace App\Models;
 
 class UserRepository extends ModelRepository
 {
+  // CREATE, READ, UPDATE, DELETE (CRUD)
 
+  /******  CREATE *******/
   public function save(array $userData): bool {
 
     $sql = "INSERT INTO users (name, email, user_timezone) VALUES (:name, :email, :user_timezone)";
@@ -12,6 +14,15 @@ class UserRepository extends ModelRepository
     $stmt->execute(['name' => $userData['name'], 'email' => $userData['email'], 'user_timezone' => $userData['user_timezone']]);
    
     return $stmt->rowCount() === 1;
+  }
+
+  /******  READ *******/ 
+  
+  public function findAll()
+  {
+    $users = $this->getPdo()->query('SELECT * FROM users')->fetchAll(\PDO::FETCH_CLASS, User::class);
+
+    return $users;
   }
 
   public function findById(int $id): ?User
@@ -29,6 +40,11 @@ class UserRepository extends ModelRepository
     return $this->makeUser($userArray);
   }
 
+  /******  UPDATE *******/
+
+  /******  DELETE *******/
+
+  /******  UTILITY *******/
   private function makeUser(array $userData): User
   {
     $user = new User();
@@ -36,7 +52,6 @@ class UserRepository extends ModelRepository
     $user->setName($userData['name']);
     $user->setEmail($userData['email']);
     $user->setUserTimezone($userData['user_timezone']);
-    $user->setCreated_at(date_create($userData['created_at'])); // create DateTime object
     $user->setUpdated_at(date_create($userData['updated_at']));
     return $user;
   }
