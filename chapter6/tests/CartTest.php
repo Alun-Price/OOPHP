@@ -5,11 +5,17 @@ use PHPUnit\Framework\TestCase;
 
 class CartTest extends TestCase
 {
+    protected $cart;
+
+    protected function setUp(): void
+    {
+      $this->cart = new Cart();
+    } 
+
     public function testCorrectNetPriceIsReturned()
     {
-      $cart = new Cart();
-      $cart->price = 10;
-      $netPrice = $cart->getNetPrice();
+      $this->cart->price = 10;
+      $netPrice = $this->cart->getNetPrice();
 
       $this->assertEquals(12, $netPrice);
     }
@@ -19,10 +25,25 @@ class CartTest extends TestCase
     {
       Cart::$tax = 1.5;
 
-      $cart = new Cart();
-      $cart->price = 10;
-      $netPrice = $cart->getNetPrice();
+      $this->cart->price = 10;
+      $netPrice = $this->cart->getNetPrice();
 
       $this->assertEquals(15, $netPrice);
     } 
+
+    /** @test */
+
+    public function a_type_error_is_thrown_when_trying_to_add_a_non_int_to_the_price()
+    {
+      try {
+        
+        $this->cart->addToPrice('fifteen');
+
+        $this->fail('A TypeError should have been thrown');
+
+      } catch (TypeError $error) {
+
+        $this->assertStringStartsWith('App\Cart::addToPrice():', $error->getMessage());
+      }  
+    }
 }
